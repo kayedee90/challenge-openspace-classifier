@@ -1,5 +1,6 @@
 import json
 import os
+from utils.file_utils import load_config
 
 class Seat:
     """
@@ -41,8 +42,7 @@ class Table:
     capacity: Number of seats per table.
     seats: A list containing Seat objects.
     """
-    
-    from utils.file_utils import load_config
+
     def __init__(self):
         """Initializes a table with dynamic setup from file_utils."""
         config = load_config()  # ✅ Get config from file_utils.py
