@@ -1,6 +1,10 @@
 import json
 import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.file_utils import load_config
+
+
 
 class Seat:
     """
@@ -45,9 +49,8 @@ class Table:
 
     def __init__(self):
         """Initializes a table with dynamic setup from file_utils."""
-        config = load_config()  # ✅ Get config from file_utils.py
-
-        self.capacity = config.get("seats_per_table", 4)  # Default: 4
+        config = load_config()
+        self.capacity = config.get("seats_per_table", 4)
         self.seats = [Seat() for _ in range(self.capacity)]
 
 
@@ -65,7 +68,7 @@ class Table:
         return: True if successfully assigned, False if no available seats.
         """
         if not self.prevent_lonely_seat():
-            return False  # Prevents single occupancy
+            return False
 
         for seat in self.seats:
             if seat.free:
@@ -96,7 +99,7 @@ class Table:
         return: False if only one person would be seated, True otherwise.
         """
         occupied_seats = sum(1 for seat in self.seats if not seat.free)
-        return occupied_seats != 1  # Prevents single-seat occupancy
+        return occupied_seats != 1
 
     def __str__(self) -> str:
         """Returns a readable string of the table."""
