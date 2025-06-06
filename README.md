@@ -12,6 +12,7 @@ Welcome to OpenSpace Organizer! Every day, colleagues are randomly assigned to n
 - Randomly assigns people to tables every day.
 - Reads colleague names from an Excel file.
 - Ensures no one sits alone.
+- Supports dynamic room setups via `config.json`.
 
 
 ### Prerequisites 🛠
