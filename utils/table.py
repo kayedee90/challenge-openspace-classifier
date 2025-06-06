@@ -1,6 +1,9 @@
 class Seat:
-    """defined by: occupant(person), which is empty by default and availability (free -> true or false), which is true by default"""
-
+    """
+    Create a seat defined by:
+    occupant: A person assigned to the seat, None by default.
+    free: A boolean representing availability, True by default.
+    """
     def __init__(self, occupant: str = None, free: bool = True):
         self.occupant = occupant
         self.free = free
@@ -8,33 +11,49 @@ class Seat:
     """create occupancy paramaters"""
 
     def set_occupant(self, name: str):
-        """assign a person to the seat and set it's availability to false"""
+        """
+        Assigns a person to the seat if available.
+        name: The occupant's name.
+        """
         if self.free:
             self.occupant = name
             self.free = False
 
     def remove_occupant(self):
-        """remove a person from a seat and set it to free"""
+        """
+        Removes an occupant and marks the seat as available.
+        """
         self.occupant = None
         self.free = True
 
-
-"""create table class"""
+    def __str__(self) -> str:
+        """Returns a readable string of the seats."""
+        return f"Seat(occupant={self.occupant if self.occupant else 'Empty'}, free={self.free})"
 
 
 class Table:
-    """define a table, set its capacity to 4 seats"""
+    """
+    Represents a table with multiple seats.
+    capacity (int): The number of seats per table, fixed at 4.
+    seats (list of Seat): A list containing Seat objects.
+    """
 
     def __init__(self):
         self.capacity = 4
         self.seats = [Seat() for _ in range(self.capacity)]
 
     def has_free_spot(self):
-        """check if table has any free spots"""
+        """
+        Function to check if table has any free spots
+        """
         return any(seat.free for seat in self.seats)
 
     def assign_seat(self, name: str):
-        """assign person to seat, if any seats are free"""
+        """
+        Assigns a person to an available seat.
+        name: The person's name.
+        return: True if successfully assigned, False if no available seats
+        """
         for seat in self.seats:
             if seat.free:
                 seat.set_occupant(name)
@@ -42,5 +61,11 @@ class Table:
         return False
 
     def left_capacity(self):
-        """returns the capacity left"""
+        """
+        Function that returns the number of free seats
+        """
         return sum(1 for seat in self.seats if seat.free)
+    
+    def __str__(self) -> str:
+        """Returns a readable string of the table."""
+        return f"Table(capacity={self.capacity}, free_seats={self.left_capacity()})"
