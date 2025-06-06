@@ -18,32 +18,46 @@ class Openspace:
         
         count = 0
         while count < 6:
-            table() = Table()
-            self.tables.append(Table)
-            count +=1
+            table = Table()
+            self.tables.append(table)
+            count += 1
 
 
     def organize(self, names):
         """
         We need a method to randomly assigns names to seats
         """
-    
-    random.shuffle(names)
+        random.shuffle(names)
 
-    for name in names:
-        seated = False
+        for name in names:
+            seated = False
+        #Assume they are not seated yet and go through the tables to see if there is any free seat
+
+            for table in self.tables:
+                if table.has_free_spot():
+                    table.assign_seat(name)
+                    seated = True
+                    break
+
+            if  not seated:
+                print(f"NO free seat for: {name}")
+
+    def display(self):
         """
-        Assume they are not seated yet and go through the tables to see if there is any free seat
+        Show who is sitting and in which table
         """
+        table_number = 1 
 
-    for table in self.tables:
-        if table.has_free_spot():
-            table.assigned_seat(name)
-            seated = True
-            break
+        for table in self.tables:
+            print(f"\nTable {table_number}")
 
-    if  not seated:
-            print(f"NO free seat for: {name}")
+            seat_number = 1
+            for seat in table.seats:
+                if seat.free:
+                    print(f" Seat {seat_number} is empty")
+                else:
+                    print(f" Seat {seat_number} is taken by {seat.occupant}")
+                seat_number += 1
 
-
-
+            table_number += 1
+        
