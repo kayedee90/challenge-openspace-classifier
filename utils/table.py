@@ -5,6 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.file_utils import load_config
 
 
+
 class Seat:
     """
     Create a seat defined by:
