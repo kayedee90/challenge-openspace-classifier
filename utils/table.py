@@ -67,14 +67,14 @@ class Table:
         name: The person's name.
         return: True if successfully assigned, False if no available seats.
         """
-        if not self.prevent_lonely_seat():
-            return False
+        
 
         for seat in self.seats:
             if seat.free:
                 seat.set_occupant(name)
                 return True
-        return False
+        if not self.prevent_lonely_seat():
+            return False
 
     def left_capacity(self) -> int:
         """
