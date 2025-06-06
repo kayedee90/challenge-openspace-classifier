@@ -1,3 +1,4 @@
+
 """create seat class"""
 class Seat:
     """defined by: occupant(person), which is empty by default and availability (free -> true or false), which is true by default"""
@@ -36,3 +37,4 @@ class Table:
         return False
     
     def
+
