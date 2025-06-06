@@ -15,7 +15,7 @@ def load_names_file (filename):
     return names
 
 if __name__ == "__main__":
-    names = load_names_file("colleagues.csv")
+    names = load_names_file("utils/colleagues.csv")
     openspace = Openspace()
     openspace.organize(names)
     openspace.display()
