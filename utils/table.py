@@ -1,3 +1,6 @@
+import json
+import os
+
 class Seat:
     """
     Create a seat defined by:
@@ -7,8 +10,6 @@ class Seat:
     def __init__(self, occupant: str = None, free: bool = True):
         self.occupant = occupant
         self.free = free
-
-    """create occupancy paramaters"""
 
     def set_occupant(self, name: str):
         """
@@ -27,45 +28,77 @@ class Seat:
         self.free = True
 
     def __str__(self) -> str:
-        """Returns a readable string of the seats."""
+        """Returns a readable string of the seat."""
         return f"Seat(occupant={self.occupant if self.occupant else 'Empty'}, free={self.free})"
 
 
 class Table:
+
     """
     Represents a table with multiple seats.
-    capacity (int): The number of seats per table, fixed at 4.
-    seats (list of Seat): A list containing Seat objects.
-    """
 
+    Attributes:
+    capacity: Number of seats per table.
+    seats: A list containing Seat objects.
+    """
+    
+    from utils.file_utils import load_config
     def __init__(self):
-        self.capacity = 4
+        """Initializes a table with dynamic setup from file_utils."""
+        config = load_config()  # ✅ Get config from file_utils.py
+
+        self.capacity = config.get("seats_per_table", 4)  # Default: 4
         self.seats = [Seat() for _ in range(self.capacity)]
 
-    def has_free_spot(self):
+
+    def has_free_spot(self) -> bool:
         """
-        Function to check if table has any free spots
+        Checks if the table has any free spots.
+        return: True if a free seat exists, False otherwise.
         """
         return any(seat.free for seat in self.seats)
 
-    def assign_seat(self, name: str):
+    def assign_seat(self, name: str) -> bool:
         """
         Assigns a person to an available seat.
         name: The person's name.
-        return: True if successfully assigned, False if no available seats
+        return: True if successfully assigned, False if no available seats.
         """
+        if not self.prevent_lonely_seat():
+            return False  # Prevents single occupancy
+
         for seat in self.seats:
             if seat.free:
                 seat.set_occupant(name)
                 return True
         return False
 
-    def left_capacity(self):
+    def left_capacity(self) -> int:
         """
-        Function that returns the number of free seats
+        Returns the number of free seats.
         """
         return sum(1 for seat in self.seats if seat.free)
-    
+
+    def add_seat(self):
+        """Adds a seat to the table."""
+        self.seats.append(Seat())
+        self.capacity += 1
+
+    def remove_seat(self):
+        """Removes the last seat if capacity is greater than 1."""
+        if self.capacity > 1:
+            self.seats.pop()
+            self.capacity -= 1
+
+    def prevent_lonely_seat(self) -> bool:
+        """
+        Ensures no one sits alone at a table.
+        return: False if only one person would be seated, True otherwise.
+        """
+        occupied_seats = sum(1 for seat in self.seats if not seat.free)
+        return occupied_seats != 1  # Prevents single-seat occupancy
+
     def __str__(self) -> str:
         """Returns a readable string of the table."""
-        return f"Table(capacity={self.capacity}, free_seats={self.left_capacity()})"
+        seat_status = ', '.join([seat.occupant if seat.occupant else 'Empty' for seat in self.seats])
+        return f"Table(capacity={self.capacity}, seats=[{seat_status}])"
